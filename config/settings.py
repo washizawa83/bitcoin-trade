@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env()
+
+BIT_FLYER_API_KEY = env('BIT_FLYER_API_KEY')
+BIT_FLYER_API_SECRET = env('BIT_FLYER_API_SECRET')
 
 
 # Quick-start development settings - unsuitable for production
