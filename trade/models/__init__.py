@@ -1,2 +1,3 @@
 from .candle import Candle
-from .indicator import Sma, MaxMin, ParabolicSAR
+from .indicators import Sma, MaxMin, ParabolicSAR
+from .settings import Settings

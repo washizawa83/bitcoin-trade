@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from trade.models.settings import Settings
+
+
+admin.site.register(Settings)

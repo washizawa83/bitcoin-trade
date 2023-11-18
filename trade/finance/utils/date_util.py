@@ -32,6 +32,7 @@ class ConvertDate:
 
     def convert_datetime_duration(timestamp, duration):
         converted_datetime = ''
+        # TODO durationの値をSettingsモデルを参照するように修正
         if duration == '1M':
             converted_datetime = pd.to_datetime(
                 datetime.datetime.strftime(timestamp, '%Y-%m-%d %H:%M'))
