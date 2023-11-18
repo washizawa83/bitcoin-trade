@@ -1,4 +1,5 @@
 import datetime
+import pandas as pd
 
 from trade.finance.api import ApiClient
 from trade.finance.utils.date_util import ConvertDate
@@ -34,11 +35,11 @@ class Ticker:
         ticker = api_client.fetch_ticker()
         settings = Settings.objects.first()
         if ticker:
-            ticker_timestamp = datetime.datetime.timestamp(
-                ticker['timestamp']) + datetime.timedelta(hours=9)
+            ticker_timestamp = datetime.datetime.strptime(ticker['timestamp'], '%Y-%m-%dT%H:%M:%S.%f') + datetime.timedelta(hours=9)
             ticker_datetime = ConvertDate.convert_datetime_duration(
                 ticker_timestamp, settings.get_duration_name(settings.duration))
             mid_price = cls._get_ticker_mid_price(ticker)
             volume = cls._get_ticker_volume(ticker)
 
             return cls(ticker_datetime, mid_price, volume)
+        
