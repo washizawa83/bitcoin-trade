@@ -19,4 +19,8 @@ class Settings(models.Model):
         duration_dict = dict(self.DURATIONS)
         return duration_dict[duration]
     
+    @classmethod
+    def get_sma_duration(cls):
+        return cls.objects.get(id=1).sma_duration
+    
     
