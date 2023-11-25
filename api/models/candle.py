@@ -64,4 +64,8 @@ class Candle(models.Model):
 
     @classmethod
     def get_candles_length(cls) -> int:
-        return cls.objects.all().count()
+        return cls.objects.count()
+    
+    @classmethod
+    def get_previous_candle(cls):
+        return cls.objects.order_by('-datetime')[1]

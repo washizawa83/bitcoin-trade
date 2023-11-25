@@ -14,6 +14,11 @@ class Settings(models.Model):
     )
     duration = models.PositiveIntegerField(choices=DURATIONS)
     sma_duration = models.PositiveIntegerField(default=5, validators=[MinValueValidator(2), MaxValueValidator(240)])
+    parabolic_sar_step = models.FloatField(default=0.02)
+    parabolic_sar_maximum = models.FloatField(default=0.2)
+
+    def __str__(self):
+        return 'トレード設定'
     
     def get_duration_name(self, duration: int) -> str:
         duration_dict = dict(self.DURATIONS)

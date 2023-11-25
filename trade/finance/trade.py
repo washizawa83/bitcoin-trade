@@ -1,7 +1,9 @@
 import time
 
 from trade.finance.finance import Ticker
-
+from api.models.candle import Candle
+from api.models.indicators import Sma, ParabolicSAR, MaxMin
+from api.models.settings import Settings
 
 
 class Trade:

@@ -1,9 +1,8 @@
 import datetime
-import pandas as pd
 
 from trade.finance.api import ApiClient
 from trade.finance.utils.date_util import ConvertDate
-from trade.models.settings import Settings
+from api.models.settings import Settings
 
 
 class Ticker:
@@ -35,7 +34,7 @@ class Ticker:
         ticker = api_client.fetch_ticker()
         settings = Settings.objects.first()
         if ticker:
-            ticker_timestamp = datetime.datetime.strptime(ticker['timestamp'], '%Y-%m-%dT%H:%M:%S.%f') + datetime.timedelta(hours=9)
+            ticker_timestamp = datetime.datetime.strptime(ticker['timestamp'].split('.')[0], '%Y-%m-%dT%H:%M:%S') + datetime.timedelta(hours=9)
             ticker_datetime = ConvertDate.convert_datetime_duration(
                 ticker_timestamp, settings.get_duration_name(settings.duration))
             mid_price = cls._get_ticker_mid_price(ticker)
