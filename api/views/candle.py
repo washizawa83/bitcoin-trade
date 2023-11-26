@@ -5,6 +5,6 @@ from api.models.candle import Candle
 from api.serializers.candle import CandleSerializer
 
 
-class CandleView(generics.ListApiView):
+class CandlesView(generics.ListAPIView):
     queryset = Candle.objects.all()
-    serializer = CandleSerializer()
+    serializer_class = CandleSerializer
