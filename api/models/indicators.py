@@ -10,6 +10,9 @@ class Sma(models.Model):
     price = models.FloatField()
     candle = models.OneToOneField(Candle, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.candle.datetime
+
     @classmethod
     def get_average_price(cls):
         duration = Settings.get_sma_duration()
@@ -30,6 +33,9 @@ class Sma(models.Model):
 class MaxMin(models.Model):
     price = models.FloatField()
     candle = models.OneToOneField(Candle, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.candle.datetime
 
     @classmethod
     def _extraction_max_min_from_trend_histories(cls, trend_history: TrendHistory) -> Candle:
@@ -64,6 +70,9 @@ class ParabolicSAR(models.Model):
     current_step = models.FloatField()
     candle = models.OneToOneField(Candle, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.candle.datetime
+
     # SAR = 前足のSAR + AF * (EP - 前足のSAR)
     @classmethod
     def _calc_sar(cls, previous_sar):
@@ -80,7 +89,7 @@ class ParabolicSAR(models.Model):
         cls.objects.create(
             candle=previous_candle,
             price=current_sar.updated_price,
-            is_up_trend=not current_sar.trend,
+            is_up_trend=not current_sar.is_up_trend,
             updated_price=updated_price,
             current_step=cls.step
         )
@@ -98,7 +107,7 @@ class ParabolicSAR(models.Model):
         return cls.objects.create(
             candle=previous_candle,
             price=prevent_sar,
-            is_up_trend=trend,
+            is_up_trend=trend.is_up_trend(),
             updated_price=updated_price,
             current_step=cls.step
         )
@@ -114,7 +123,7 @@ class ParabolicSAR(models.Model):
             if previous_candle.low < current_sar.price:
                 return cls._convert_sar(previous_candle, current_sar)
 
-            if current_sar.updated_price < previous_candle.low.high:
+            if current_sar.updated_price < previous_candle.high:
                 updated_price = previous_candle.high
                 step = current_sar.step if cls.maximum <= current_sar.step else current_sar.step + cls.step
         # 下降トレンド
@@ -127,10 +136,9 @@ class ParabolicSAR(models.Model):
                 updated_price = previous_candle.low
                 step = current_sar.step if cls.maximum <= current_sar.step else current_sar.step + cls.step
 
-        previous_sar = cls.objects.order_by('-datetime')[1]
         return cls.objects.create(
             candle=previous_candle,
-            price=cls._calc_sar(previous_sar),
+            price=cls._calc_sar(current_sar),
             is_up_trend=current_sar.is_up_trend,
             updated_price=updated_price,
             current_step=step
