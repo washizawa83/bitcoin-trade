@@ -35,7 +35,7 @@ class MaxMin(models.Model):
     candle = models.OneToOneField(Candle, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.candle.datetime
+        return str(self.candle.datetime)
 
     @classmethod
     def _extraction_max_min_from_trend_histories(cls, trend_history: TrendHistory) -> Candle:
